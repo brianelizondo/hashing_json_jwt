@@ -5,10 +5,8 @@ const { BCRYPT_WORK_FACTOR } = require("../config");
 
 const db = require("../db");
 const ExpressError = require("../expressError");
-const Message = require("./message");
 
 /** User of the site. */
-
 class User {
     constructor({ username, first_name, last_name, phone, join_at, last_login_at }) {
         this.username = username;
@@ -18,11 +16,12 @@ class User {
         this.join_at = new Date(join_at);
         this.last_login_at = last_login_at !== null ? new Date(last_login_at) : null;
     }
+
     /** 
     * Register new user
     *   Returns {username, password, first_name, last_name, phone}
     */
-    static async register({username, password, first_name, last_name, phone}){ 
+    static async register(username, password, first_name, last_name, phone){ 
         const result_user = await db.query(
             `SELECT 
                 username 
@@ -62,7 +61,9 @@ class User {
         if(user){
             if(await bcrypt.compare(password, user.password)){
                 return true;
-            } 
+            }else{
+                return false;
+            }
         }
         return false;
     }
@@ -150,15 +151,14 @@ class User {
             throw new ExpressError(`No such username: ${username}`, 404);
         }
 
-        const user = new User(result_user.rows[0]);
         const result = await db.query(
             `SELECT 
-                id, to_user, body, sent_at, read_at 
+                id, to_username, body, sent_at, read_at 
             FROM messages 
             WHERE from_username = $1`, 
-        [user]);
+        [username]);
 
-        return result.rows[0];
+        return result.rows;
     }
 
     /** 
@@ -180,15 +180,14 @@ class User {
             throw new ExpressError(`No such username: ${username}`, 404);
         }
 
-        const user = new User(result_user.rows[0]);
         const result = await db.query(
             `SELECT 
-                id, to_user, body, sent_at, read_at 
+                id, from_username, body, sent_at, read_at 
             FROM messages 
             WHERE to_username = $1`, 
-        [user]);
+        [username]);
 
-        return result.rows[0];
+        return result.rows;
     }
 }
 

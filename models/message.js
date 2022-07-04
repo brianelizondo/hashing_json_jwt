@@ -3,16 +3,14 @@
 const db = require("../db");
 const ExpressError = require("../expressError");
 
-
 /** Message on the site. */
-
 class Message {
 
-  /** register new message -- returns
-   *    {id, from_username, to_username, body, sent_at}
-   */
-
-  static async create({from_username, to_username, body}) {
+  /** 
+  * Register new message -- returns
+  *    {id, from_username, to_username, body, sent_at}
+  */
+  static async create(from_username, to_username, body) {
     const result = await db.query(
         `INSERT INTO messages (
               from_username,
@@ -26,8 +24,9 @@ class Message {
     return result.rows[0];
   }
 
-  /** Update read_at for message */
-
+  /** 
+  * Update read_at for message 
+  */
   static async markRead(id) {
     const result = await db.query(
         `UPDATE messages
@@ -43,14 +42,12 @@ class Message {
     return result.rows[0];
   }
 
-  /** Get: get message by id
-   *
-   * returns {id, from_user, to_user, body, sent_at, read_at}
-   *
-   * both to_user and from_user = {username, first_name, last_name, phone}
-   *
-   */
-
+  /** 
+  * Get: get message by id
+  *   Returns {id, from_user, to_user, body, sent_at, read_at}
+  *
+  * Both to_user and from_user = {username, first_name, last_name, phone}
+  */
   static async get(id) {
     const result = await db.query(
         `SELECT m.id,
