@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %} User Details: @{{ user.username }} {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/users/{{ user.username }}">
+                    <img src="https://cdn.icon-icons.com/icons2/2770/PNG/512/chat_message_icon_176706.png" alt="" width="40" class="d-inline-block ">Message.ly
+                </a>
+                <a class="nav-link" href="/users/{{ user.username }}">@{{ user.username }}</a>
+                <a class="nav-link" href="/auth/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <h1 class="mt-5">User Details</h1>
+        <div>
+            <p><b>First Name: </b>{{ user.first_name }}</p>
+            <p><b>Last Name: </b>{{ user.last_name }}</p>
+            <p><b>Phone: </b>{{ user.phone }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <h3 class="mt-5"><i class="fa-solid fa-message-arrow-up-right"></i> Send New Message</h3>
+        <form action="/messages" method="POST">
+            <div class="form-group mt-3">
+                <label for="to_username" class="form-label">Send to User:</label>
+                <select class="form-control" name="to_username" id="to_username">
+                    {% for to_user in users_all %}
+                        {% if to_user.username != user.username %}
+                    <option value="{{ to_user.username }}">{{ to_user.username }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group mt-3">
+                <label for="body" class="form-label">Message:</label>
+                <input id="body" type="text" class="form-control" name="body">
+            </div>
+            <button id="sendMessageButton" class="btn btn-info btn-sm mt-3">Send!</button>
+        </form>
+    </div>
+    <div id="received_messages" class="row">
+        <h3 class="mt-5"><i class="fa-solid fa-message-arrow-down"></i> Received messages</h3>
+        {% for message in messages_to %}
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ message.from_username }} &raquo; {{ user.username }}</h5>
+                    <p class="card-text">{{ message.body }}</p>
+                    <a href="/messages/{{ message.id }}" class="btn btn-outline-info btn-sm">Read</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div id="sent_messages" class="row">
+        <h3 class="mt-5"><i class="fa-solid fa-message-arrow-up"></i> Sent Messages</h3>
+        {% for message in messages_from %}
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.username }} &raquo; {{ message.to_username }}</h5>
+                    <p class="card-text">{{ message.body }}</p>
+                    <a href="/messages/{{ message.id }}" class="btn btn-outline-info btn-sm">Read</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row mt-5"></div>
+</div>
+{% endblock %}

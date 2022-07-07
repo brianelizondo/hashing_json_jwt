@@ -21,12 +21,17 @@ const router = new express.Router();
 router.get("/:id", ensureLoggedIn, async function(req, res, next) {
     try {
         const message = await Message.get(req.params.id);
+        
+        // const payload = jwt.decode(req.body._token);
+        const payload = req.cookies['message.ly'] ? jwt.decode(req.cookies['message.ly']) : jwt.decode(req.body._token);
+        const user_username = payload.username;
 
-        const payload = jwt.decode(req.body._token);
-        if(payload.username == message.from_user.username || payload.username == message.to_user.username){
-            return res.json({ message: message });
+        if(user_username == message.from_user.username || user_username == message.to_user.username){
+            // return res.json({ message: message });
+            await Message.markRead(req.params.id);
+            return res.render("message_details.html", { message, user_username });
         }
-        throw new ExpressError("Unauthorized", 401);
+        throw new ExpressError("Unauthorized XXX", 401);
     } catch (err) {
         return next(err);
     }
@@ -45,7 +50,8 @@ router.post("/", ensureLoggedIn, async function(req, res, next) {
             throw new ExpressError("All fields are required", 400);
         }
 
-        const payload = jwt.decode(req.body._token);
+        //const payload = jwt.decode(req.body._token);
+        const payload = req.cookies['message.ly'] ? jwt.decode(req.cookies['message.ly']) : jwt.decode(req.body._token);
         const message = await Message.create(payload.username, to_username, body);
         return res.json({ message: message });
     } catch (err) {

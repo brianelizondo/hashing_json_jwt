@@ -7,6 +7,13 @@ const User = require("../models/user");
 
 const router = new express.Router();
 
+/*
+* GET /register - form to login user
+*/
+router.get("/login", function(req, res) {
+    res.render("login.html");
+});
+
 /** 
 * POST /login - login: {username, password} => {token}
 *   Make sure to update their last-login!
@@ -21,12 +28,31 @@ router.post("/login", async function(req, res, next) {
         if(await User.authenticate(username, password)){
             await User.updateLoginTimestamp(username);
             let token = jwt.sign({ username }, SECRET_KEY);
-            return res.json({ token });
+            // return res.json({ token });
+            res.cookie('message.ly', token, { httpOnly: true, secure: true })
+            return res.redirect(`/users/${username}`);
         }
         throw new ExpressError("Invalid username/password", 400);
     } catch (err) {
         return next(err);
     }
+});
+
+/*
+* GET /logout - logout user
+*/
+router.get("/logout", function(req, res) {
+    if(req.cookies['message.ly']){
+        res.clearCookie('message.ly');
+    }
+    return res.redirect("/");
+});
+
+/*
+* GET /register - form to register new user
+*/
+router.get("/register", function(req, res) {
+    res.render("register.html");
 });
 
 /*

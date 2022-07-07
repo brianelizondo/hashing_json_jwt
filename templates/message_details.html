@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %} Message Details {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/users/{{ user_username }}">
+                    <img src="https://cdn.icon-icons.com/icons2/2770/PNG/512/chat_message_icon_176706.png" alt="" width="40" class="d-inline-block ">Message.ly
+                </a>
+                <a class="nav-link" href="/users/{{ user_username }}">@{{ user_username }}</a>
+                <a class="nav-link" href="/auth/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <h1 class="mt-5">Message Details:</h1>
+        <div class="col-sm-12 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ message.from_user.username }} &raquo; {{ message.to_user.username }}</h5>
+                    <p style="font-size: 11px; color:lightslategray;">{{ message.sent_at }}</p>
+                    <p class="card-text">{{ message.body }}</p>
+                </div>
+            </div>
+        </div>
+        <a href="/users/{{ user_username }}" class="btn btn-outline-info btn-sm mt-3">Back</a>
+    </div>
+    <div class="row mt-5"></div>
+</div>
+{% endblock %}

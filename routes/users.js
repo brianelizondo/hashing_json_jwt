@@ -26,7 +26,11 @@ router.get("/", ensureLoggedIn, async function(req, res, next) {
 router.get("/:username", ensureCorrectUser, async function(req, res, next) {
     try {
         const user = await User.get(req.params.username);
-        return res.json({ user: user });
+        const users_all = await User.all();
+        const messages_to = await User.messagesTo(req.params.username);
+        const messages_from = await User.messagesFrom(req.params.username); 
+        // return res.json({ user: user });
+        res.render("users_details.html", { user, users_all, messages_to, messages_from });
     } catch (err) {
         return next(err);
     }

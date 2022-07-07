@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="https://cdn.icon-icons.com/icons2/2770/PNG/512/chat_message_icon_176706.png" alt="" width="40" class="d-inline-block ">Message.ly
+                </a>
+                <a class="nav-link" href="/auth/register">Register</a>
+                <a class="nav-link" href="/auth/login">Login</a>
+            </div>
+        </nav>
+    </div>
+    <div class="text-center mt-5">
+        <img src="https://cdn.icon-icons.com/icons2/2770/PNG/512/chat_message_icon_176706.png" alt="" width="350">
+        <h1>Message.ly APP</h1>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="https://cdn.icon-icons.com/icons2/2770/PNG/512/chat_message_icon_176706.png" alt="" width="40" class="d-inline-block ">Message.ly
+                </a>
+                <a class="nav-link" href="/auth/register"><i class="fa-solid fa-user-plus"></i> Register</a>
+                <a class="nav-link" href="/auth/login"><i class="fa-solid fa-arrow-right-to-arc"></i>Login</a>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <h1 class="mt-5">Register</h1>
+        <form action="/register" method="POST">
+            <div class="form-group">
+                <label for="username" class="form-label">Username:</label>
+                <input id="username" type="text" class="form-control" name="username">
+            </div>
+            <div class="form-group mt-3">
+                <label for="password" class="form-label">Password:</label>
+                <input id="password" type="password" class="form-control" name="password">
+            </div>
+            <div class="form-group mt-3">
+                <label for="first_name" class="form-label">First Name:</label>
+                <input id="first_name" type="text" class="form-control" name="first_name">
+            </div>
+            <div class="form-group mt-3">
+                <label for="last_name" class="form-label">Last Name:</label>
+                <input id="last_name" type="text" class="form-control" name="last_name">
+            </div>
+            <div class="form-group mt-3">
+                <label for="phone" class="form-label">Phone:</label>
+                <input id="phone" type="text" class="form-control" name="phone">
+            </div>
+            <button class="btn btn-primary mt-3">Register!</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
